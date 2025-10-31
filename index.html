@@ -100,24 +100,12 @@ launchBtn.addEventListener('click', () => {
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const content = e.target.result.toLowerCase();
+  // Launch the file in a new tab
+  const fileURL = URL.createObjectURL(file);
+  window.open(fileURL, "_blank");
 
-    if (content.includes("uwu") || content.includes("dragonx")) {
-      errorDiv.textContent = "Hacks are banned for right now until I ask somebody if hacks are allowed";
-      return;
-    }
-
-    // Launch the file in a new tab
-    const fileURL = URL.createObjectURL(file);
-    window.open(fileURL, "_blank");
-
-    // Close current page
-    setTimeout(() => window.close(), 500);
-  }
-
-  reader.readAsText(file);
+  // Close current page
+  setTimeout(() => window.close(), 500);
 });
 </script>
 </body>
