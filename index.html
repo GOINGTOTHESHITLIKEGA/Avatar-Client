@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eaglecraft Launcher</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0b0d13;
+    color: #c9d1d9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .launcher {
+    width: 450px;
+    background: #161b22;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+
+  .tabs { display: flex; background: #0d1117; }
+  .tab { flex: 1; text-align: center; padding: 12px 0; cursor: pointer; transition: background 0.2s; }
+  .tab.active, .tab:hover { background: #21262d; }
+
+  .content { padding: 30px; }
+
+  h1 { text-align: center; margin-bottom: 20px; color: #58a6ff; }
+
+  select, input[type="file"] {
+    width: 100%; padding: 10px; margin: 12px 0; border-radius: 6px;
+    border: 1px solid #30363d; background-color: #0d1117; color: #c9d1d9;
+  }
+
+  .launch-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(90deg, #238636, #2ea043);
+    color: white; font-weight: bold; border: none; border-radius: 6px;
+    cursor: pointer; margin-top: 12px; position: relative; overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .launch-btn:hover { transform: scale(1.05); }
+  .launch-btn.loading::after {
+    content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: rgba(255,255,255,0.2); animation: loading 1s linear infinite;
+  }
+  @keyframes loading { to { left: 100%; } }
+
+  .error { color: #f85149; margin-top: 10px; text-align: center; }
+
+  /* Toggle Switch */
+  .mod { display: flex; justify-content: space-between; margin: 10px 0; }
+  .switch {
+    position: relative; display: inline-block; width: 50px; height: 24px;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #30363d; transition: .4s; border-radius: 34px;
+  }
+  .slider:before {
+    position: absolute; content: ""; height: 20px; width: 20px; left: 2px; bottom: 2px;
+    background-color: white; transition: .4s; border-radius: 50%;
+  }
+  input:checked + .slider { background-color: #238636; }
+  input:checked + .slider:before { transform: translateX(26px); }
+</style>
+</head>
+<body>
+<div class="launcher">
+  <div class="tabs">
+    <div class="tab active" data-tab="home">Home</div>
+    <div class="tab" data-tab="settings">Settings</div>
+    <div class="tab" data-tab="mods">Mods</div>
+  </div>
+
+  <div class="content" id="tabContent">
+    <h1>Welcome to Eaglecraft</h1>
+    <label for="version">Select Minecraft Version:</label>
+    <select id="version">
+      <option value="">--Select Version--</option>
+      <option value="1.5.2">1.5.2</option>
+      <option value="1.8.8">1.8.8</option>
+      <option value="1.12.2">1.12.2</option>
+    </select>
+    <input type="file" id="fileInput" accept=".html" />
+    <button class="launch-btn" id="launchBtn">Launch</button>
+    <div class="error" id="error"></div>
+  </div>
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.tab');
+const tabContent = document.getElementById('tabContent');
+
+const modsList = [
+  { name: "DragonV2X", key: "dragonv2x" },
+  { name: "UWU", key: "uwu" }
+];
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const name = tab.getAttribute('data-tab');
+    if(name === "home"){
+      renderHome();
+    } else if(name === "settings"){
+      tabContent.innerHTML = `<h1>Settings</h1><p style="text-align:center;color:#8b949e;margin-top:20px;">Coming soon...</p>`;
+    } else if(name === "mods"){
+      renderMods();
+    }
+  });
+});
+
+function renderHome(){
+  tabContent.innerHTML = `
+    <h1>Welcome to Eaglecraft</h1>
+    <label for="version">Select Minecraft Version:</label>
+    <select id="version">
+      <option value="">--Select Version--</option>
+      <option value="1.5.2">1.5.2</option>
+      <option value="1.8.8">1.8.8</option>
+      <option value="1.12.2">1.12.2</option>
+    </select>
+    <input type="file" id="fileInput" accept=".html" />
+    <button class="launch-btn" id="launchBtn">Launch</button>
+    <div class="error" id="error"></div>
+  `;
+  initLaunch();
+}
+
+function renderMods(){
+  let html = `<h1>Mods</h1>`;
+  modsList.forEach(mod => {
+    const enabled = localStorage.getItem(mod.key) === "true";
+    html += `
+      <div class="mod">
+        <span>${mod.name}</span>
+        <label class="switch">
+          <input type="checkbox" id="${mod.key}" ${enabled ? "checked" : ""}>
+          <span class="slider"></span>
+        </label>
+      </div>
+    `;
+  });
+  tabContent.innerHTML = html;
+
+  modsList.forEach(mod => {
+    document.getElementById(mod.key).addEventListener('change', (e)=>{
+      localStorage.setItem(mod.key, e.target.checked);
+    });
+  });
+}
+
+function initLaunch(){
+  const launchBtn = document.getElementById('launchBtn');
+  const versionSelect = document.getElementById('version');
+  const fileInput = document.getElementById('fileInput');
+  const errorDiv = document.getElementById('error');
+
+  launchBtn.addEventListener('click', () => {
+    errorDiv.textContent = "";
+    const version = versionSelect.value;
+    const file = fileInput.files[0];
+
+    if (!["1.5.2","1.8.8","1.12.2"].includes(version)){
+      errorDiv.textContent = "Error: Incompatible version!";
+      return;
+    }
+    if (!file){
+      errorDiv.textContent = "Error: Please upload an HTML file!";
+      return;
+    }
+
+    launchBtn.classList.add('loading');
+
+    // Simulate passing enabled mods to the client
+    const enabledMods = {};
+    modsList.forEach(mod => {
+      enabledMods[mod.key] = localStorage.getItem(mod.key) === "true";
+    });
+    console.log("Launching with mods:", enabledMods);
+
+    setTimeout(() => {
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL + "?mods=" + encodeURIComponent(JSON.stringify(enabledMods)), "_blank");
+      launchBtn.classList.remove('loading');
+      window.close();
+    }, 1500);
+  });
+}
+
+renderHome();
+</script>
+</body>
+</html>
