@@ -2,6 +2,5 @@
 # Eaglecraft Verison Launcher
 # Compitable with 1.5.2 To 1.12.2 Hacks Arent Yet Allowed
  # Need to have a download able file 
-# Or Code For the html (Downable file IS better)
 
 
