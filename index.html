@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Eaglecraft Launcher — Lunar Style</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+  /* ---------- fonts & reset ---------- */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI, Roboto, "Helvetica Neue", Arial;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(40,44,52,0.25), transparent),
+                linear-gradient(180deg,#06070a,#0b0d13);
+    color:#c9d1d9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:30px;
+  }
+
+  /* ---------- launcher window ---------- */
+  .launcher {
+    width: 760px;
+    max-width:calc(100% - 40px);
+    border-radius:14px;
+    background: linear-gradient(180deg,#0f1418 0%, #12161a 100%);
+    box-shadow: 0 30px 80px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+    overflow:hidden;
+    transform: translateY(20px);
+    opacity:0;
+    animation: floatIn 450ms cubic-bezier(.2,.9,.3,1) forwards;
+  }
+  @keyframes floatIn { to { transform: translateY(0); opacity:1; } }
+
+  /* ---------- header ---------- */
+  .header {
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:18px 22px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .logo {
+    width:46px; height:46px; border-radius:10px;
+    background: linear-gradient(135deg,#2ea043,#238636);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:white;box-shadow:0 6px 24px rgba(46,160,67,0.12);
+  }
+  .title {
+    font-weight:700; letter-spacing:0.2px; font-size:18px;
+  }
+  .subtitle {
+    color:#8b949e; font-size:12px; margin-top:4px;
+  }
+  .header-right { margin-left:auto; display:flex; gap:10px; align-items:center; }
+
+  /* ---------- body layout ---------- */
+  .body {
+    display:grid;
+    grid-template-columns: 320px 1fr;
+    gap:20px;
+    padding:22px;
+  }
+
+  /* left panel (sidebar) */
+  .sidebar {
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), transparent);
+    border-radius:10px; padding:14px; min-height:240px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .sidebar h3 { margin:0; color:#9fb7ff; font-weight:600; font-size:13px; }
+  .version-box {
+    background: linear-gradient(180deg,#0d1117,#0c0f12);
+    border-radius:8px; padding:10px; border:1px solid rgba(255,255,255,0.02);
+  }
+  select, input[type=file] {
+    width:100%; padding:10px; border-radius:8px; background:#0b0d11; border:1px solid rgba(255,255,255,0.03);
+    color:inherit; outline:none;
+  }
+
+  /* right panel (main content) */
+  .main {
+    padding:14px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+    min-height:240px; display:flex; flex-direction:column;
+  }
+
+  /* tabs row */
+  .tabs {
+    display:flex; gap:8px; margin-bottom:12px;
+  }
+  .tab {
+    padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; font-size:13px;
+    color:#aebecd; background:transparent; border:1px solid transparent;
+    transition: all 160ms ease;
+  }
+  .tab:hover { transform:translateY(-3px); }
+  .tab.active { background: linear-gradient(90deg, rgba(88,166,255,0.12), rgba(88,166,255,0.06)); color:#58a6ff; border:1px solid rgba(88,166,255,0.08); box-shadow:0 6px 18px rgba(8,12,20,0.4); }
+
+  /* content cards */
+  .card { background:#0d1116; border-radius:10px; padding:14px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.02); box-shadow: 0 8px 24px rgba(2,6,23,0.45); }
+
+  .launch-row { display:flex; gap:12px; align-items:center; margin-top:auto; }
+  .launch-btn {
+    flex:1; padding:14px 18px; border-radius:10px; border:none; font-weight:700; cursor:pointer;
+    background: linear-gradient(90deg,#238636,#2ea043); color:white; box-shadow: 0 8px 24px rgba(46,160,67,0.14);
+    position:relative; overflow:hidden; transition:transform 180ms ease;
+  }
+  .launch-btn:hover { transform:translateY(-4px); }
+  .launch-btn.loading::after {
+    content:""; position:absolute; left:-40%; top:0; width:40%; height:100%; background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); animation: sweep 900ms linear infinite;
+  }
+  @keyframes sweep { to { left:140%; } }
+
+  .small-btn { padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:#9fb7ff; cursor:pointer; }
+
+  .error { color:#ff6b6b; margin-top:8px; font-weight:600; text-align:center; }
+
+  /* mods list */
+  .mods-list { display:flex; flex-direction:column; gap:10px; }
+  .mod-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .mod-name { font-weight:600; color:#d6e7ff; font-size:14px; }
+  .mod-desc { font-size:12px; color:#8b949e; margin-top:4px; }
+
+  /* toggle switch */
+  .switch { position:relative; width:52px; height:28px; display:inline-block; }
+  .switch input { opacity:0; width:0; height:0; }
+  .slider {
+    position:absolute; inset:0; border-radius:20px; background:#2c3136; transition:all 180ms;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.3);
+  }
+  .slider:before {
+    content:""; position:absolute; left:4px; top:4px; width:20px; height:20px; border-radius:50%; background:#fff; transition:all 180ms;
+  }
+  input:checked + .slider { background:linear-gradient(90deg,#238636,#2ea043); box-shadow:0 8px 20px rgba(46,160,67,0.12); }
+  input:checked + .slider:before { transform: translateX(24px); }
+
+  /* small helper */
+  .muted { color:#8b949e; font-size:13px; }
+  .center { text-align:center; }
+  .spacer { height:8px; }
+
+  /* responsive */
+  @media (max-width:820px){
+    .body{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="launcher" role="application" aria-label="Eaglecraft Launcher">
+    <div class="header">
+      <div class="logo">E</div>
+      <div>
+        <div class="title">Eaglecraft Launcher</div>
+        <div class="subtitle">Lunar-style • Lightweight • Mods ready</div>
+      </div>
+      <div class="header-right">
+        <button class="small-btn" id="importPresetBtn" title="Import preset">Import</button>
+        <button class="small-btn" id="exportPresetBtn" title="Export mods">Export</button>
+      </div>
+    </div>
+
+    <div class="body">
+      <!-- left: controls -->
+      <div class="sidebar">
+        <h3>Play Controls</h3>
+        <div class="version-box card" style="padding:12px;">
+          <label class="muted" for="versionSelect">Minecraft Version</label>
+          <select id="versionSelect">
+            <option value="">— Select —</option>
+            <option value="1.5.2">1.5.2</option>
+            <option value="1.8.8">1.8.8</option>
+            <option value="1.12.2">1.12.2</option>
+          </select>
+          <div class="spacer"></div>
+          <label class="muted" for="fileInput">Upload Eaglecraft HTML</label>
+          <input type="file" id="fileInput" accept=".html,.htm" />
+          <div id="fileName" class="muted center" style="margin-top:8px;">No file chosen</div>
+        </div>
+
+        <div style="margin-top:auto;">
+          <div class="muted" style="font-size:12px; text-align:center;">Launcher v1 • Local only</div>
+        </div>
+      </div>
+
+      <!-- right: main -->
+      <div class="main">
+        <div class="tabs" role="tablist" aria-label="Main tabs">
+          <div class="tab active" data-tab="home">Home</div>
+          <div class="tab" data-tab="mods">Mods</div>
+          <div class="tab" data-tab="settings">Settings</div>
+        </div>
+
+        <div id="contentArea" style="flex:1; overflow:auto;">
+          <!-- Home content (default) -->
+          <div id="homeTab" class="tabContent">
+            <div class="card">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,#58a6ff,#7ad1ff);display:flex;align-items:center;justify-content:center;font-size:22px;color:white;font-weight:700">EC</div>
+                <div>
+                  <div style="font-weight:700;font-size:16px">Eaglecraft</div>
+                  <div class="muted" style="margin-top:6px">Select version, upload your HTML client and launch with enabled mods.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="display:flex;gap:12px;align-items:center">
+                <div style="flex:1">
+                  <div style="font-weight:700">Ready to Launch</div>
+                  <div class="muted" style="margin-top:6px">Pick a version and the client HTML, then click Launch.</div>
+                </div>
+                <div style="width:260px">
+                  <div class="launch-row">
+                    <button class="launch-btn" id="launchBtn">Launch</button>
+                    <button class="small-btn" id="viewModsBtn">View</button>
+                  </div>
+                  <div id="errorArea" class="error" style="display:none"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card center muted" style="padding:12px">Tip: The uploaded HTML will receive a global `window.EAGLECRAFT_MODS` object. Use that to enable/disable mod features inside your client.</div>
+          </div>
+
+          <!-- Mods content -->
+          <div id="modsTab" class="tabContent" style="display:none;">
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                  <div style="font-weight:700">Installed Mods</div>
+                  <div class="muted" style="margin-top:6px">Toggle mods on/off. Settings persist locally.</div>
+                </div>
+                <button class="small-btn" id="resetModsBtn">Reset</button>
+              </div>
+
+              <div class="spacer"></div>
+
+              <div class="mods-list" id="modsListContainer">
+                <!-- JS populated -->
+              </div>
+            </div>
+
+            <div class="card muted center" style="padding:10px">
+              These toggles store your preference in localStorage and will be injected into the client on launch.
+            </div>
+          </div>
+
+          <!-- Settings content -->
+          <div id="settingsTab" class="tabContent" style="display:none;">
+            <div class="card">
+              <div style="font-weight:700">Settings</div>
+              <div class="muted" style="margin-top:8px">A few simple local options.</div>
+
+              <div style="margin-top:12px">
+                <label class="muted">Auto-close launcher after launch</label>
+                <div style="margin-top:8px">
+                  <label class="switch">
+                    <input type="checkbox" id="autoCloseToggle">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+/* ===========================
+   Data: mods + defaults
+   =========================== */
+const MODS = [
+  { key: 'dragonv2x', name: 'Dragon V2 X', desc: 'Performance tweaks & combat utilities' },
+  { key: 'uwu', name: 'UWU', desc: 'Quality-of-life overlays and HUD' },
+  { key: 'flight', name: 'Flight', desc: 'Toggle flight support (client-side simulation)' },
+  { key: 'xray', name: 'XRay', desc: 'X-ray ore highlight' },
+  { key: 'killaura', name: 'KillAura', desc: 'Combat target assistance' }
+];
+
+const DEFAULTS = {};
+MODS.forEach(m => DEFAULTS[m.key] = false);
+
+/* ===========================
+   Helpers
+   =========================== */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const storageKey = k => `eagle_mod_${k}`;
+
+function getModValue(key){
+  const v = localStorage.getItem(storageKey(key));
+  return v === null ? DEFAULTS[key] : (v === 'true');
+}
+function setModValue(key, val){
+  localStorage.setItem(storageKey(key), val ? 'true' : 'false');
+}
+
+/* ===========================
+   UI wiring
+   =========================== */
+const tabs = $$('.tab');
+const contentMap = {
+  home: $('#homeTab'),
+  mods: $('#modsTab'),
+  settings: $('#settingsTab')
+};
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  const name = t.dataset.tab;
+  // show/hide tab contents with fade
+  Object.keys(contentMap).forEach(k => {
+    contentMap[k].style.display = (k===name) ? 'block' : 'none';
+    contentMap[k].style.opacity = (k===name) ? '1' : '0';
+  });
+}));
+
+/* Mods render */
+function renderMods(){
+  const container = $('#modsListContainer');
+  container.innerHTML = '';
+  MODS.forEach(mod => {
+    const enabled = getModValue(mod.key);
+    const el = document.createElement('div');
+    el.className = 'mod-row';
+    el.innerHTML = `
+      <div style="flex:1">
+        <div class="mod-name">${escapeHtml(mod.name)}</div>
+        <div class="mod-desc">${escapeHtml(mod.desc)}</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="mod_${mod.key}" ${enabled ? 'checked' : ''}>
+        <span class="slider"></span>
+      </label>
+    `;
+    container.appendChild(el);
+    // bind toggle
+    el.querySelector('input').addEventListener('change', (ev)=>{
+      setModValue(mod.key, ev.target.checked);
+    });
+  });
+}
+function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, (c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
+
+/* initial render */
+renderMods();
+$('#fileInput').addEventListener('change', (e)=>{
+  const f = e.target.files[0];
+  $('#fileName').textContent = f ? `${f.name} (${Math.round(f.size/1024)} KB)` : 'No file chosen';
+});
+
+/* import/export presets */
+$('#exportPresetBtn').addEventListener('click', ()=>{
+  const preset = {};
+  MODS.forEach(m => preset[m.key] = getModValue(m.key));
+  const blob = new Blob([JSON.stringify(preset, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'eagle_mods_preset.json';
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+});
+$('#importPresetBtn').addEventListener('click', ()=>{
+  const input = document.createElement('input'); input.type='file'; input.accept='application/json';
+  input.addEventListener('change', () => {
+    const f = input.files[0];
+    if(!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const obj = JSON.parse(r.result);
+        MODS.forEach(m => {
+          if(typeof obj[m.key] === 'boolean') setModValue(m.key, obj[m.key]);
+        });
+        renderMods();
+      } catch(err){
+        alert('Invalid preset file.');
+      }
+    };
+    r.readAsText(f);
+  });
+  input.click();
+});
+
+/* reset mods */
+$('#resetModsBtn').addEventListener('click', ()=>{
+  if(!confirm('Reset all mod toggles to defaults?')) return;
+  MODS.forEach(m => { localStorage.removeItem(storageKey(m.key)); });
+  renderMods();
+});
+
+/* settings */
+$('#autoCloseToggle').checked = (localStorage.getItem('eagle_auto_close') === 'true');
+$('#autoCloseToggle').addEventListener('change', (e) => {
+  localStorage.setItem('eagle_auto_close', e.target.checked ? 'true' : 'false');
+});
+
+/* view mods quick button - go to mods tab */
+$('#viewModsBtn').addEventListener('click', ()=> {
+  $('.tab[data-tab="mods"]').click();
+});
+
+/* launch logic: read file, inject mods, open blob */
+$('#launchBtn').addEventListener('click', async function(){
+  const btn = this;
+  const err = $('#errorArea');
+  err.style.display = 'none'; err.textContent = '';
+
+  const version = $('#versionSelect').value.trim();
+  const fileInput = $('#fileInput').files[0];
+
+  if(!['1.5.2','1.8.8','1.12.2'].includes(version)){
+    err.textContent = 'Error: Choose a compatible version (1.5.2, 1.8.8, 1.12.2).';
+    err.style.display = 'block';
+    return;
+  }
+  if(!fileInput){
+    err.textContent = 'Error: Upload your Eaglecraft HTML client.';
+    err.style.display = 'block';
+    return;
+  }
+
+  // show loading state
+  btn.classList.add('loading');
+  btn.textContent = 'Preparing…';
+
+  try {
+    const content = await readFileAsText(fileInput);
+    // build mods object from localStorage
+    const modsObj = {};
+    MODS.forEach(m => modsObj[m.key] = getModValue(m.key));
+    // attach metadata like version
+    const meta = { version, timestamp: Date.now() };
+
+    // Create a small injection script that sets a global and optionally calls a known init hook
+    const injection = `
+      <script>
+        // Eaglecraft launcher injected mods object
+        window.EAGLECRAFT_MODS = ${JSON.stringify(modsObj)};
+        window.EAGLECRAFT_META = ${JSON.stringify(meta)};
+        // optional: if the client exposes a loader function, call it
+        try { if(typeof window.onEaglecraftLauncher === 'function'){ window.onEaglecraftLauncher(window.EAGLECRAFT_MODS, window.EAGLECRAFT_META); } } catch(e){ console.error(e); }
+      <\/script>
+    `;
+
+    // If the uploaded HTML already has <head> or <body>, inject into head if possible, else prefix
+    let finalHtml;
+    if(/<head[\s>]/i.test(content)){
+      finalHtml = content.replace(/<head([\s>])/i, `<head$1\n${injection}`);
+    } else if(/<html[\s>]/i.test(content)){
+      finalHtml = content.replace(/<html([\s>])/i, `<html$1\n${injection}`);
+    } else {
+      finalHtml = injection + '\n' + content;
+    }
+
+    // Create a blob from finalHtml and open in a new tab
+    const blob = new Blob([finalHtml], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+
+    // after brief delay, optionally close launcher if allowed
+    setTimeout(() => {
+      btn.classList.remove('loading'); btn.textContent = 'Launch';
+      if(localStorage.getItem('eagle_auto_close') === 'true'){
+        try { window.close(); } catch(e){ /* ignore */ }
+      }
+    }, 600);
+
+  } catch (err2) {
+    console.error(err2);
+    err.textContent = 'Error preparing client: ' + (err2.message || err2);
+    err.style.display = 'block';
+    btn.classList.remove('loading');
+    btn.textContent = 'Launch';
+  }
+});
+
+/* small helper to read file as text */
+function readFileAsText(file){
+  return new Promise((resolve, reject)=>{
+    const r = new FileReader();
+    r.onload = ()=> resolve(String(r.result));
+    r.onerror = ()=> reject(new Error('Failed to read file'));
+    r.readAsText(file);
+  });
+}
+
+/* Initialize UI state: highlight home */
+document.addEventListener('DOMContentLoaded', ()=>{
+  // ensure home tab visible
+  $('.tab[data-tab="home"]').click();
+});
+</script>
+</body>
+</html>
