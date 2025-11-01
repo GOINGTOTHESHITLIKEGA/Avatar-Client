@@ -9,11 +9,12 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
   :root{
-    --accent-1: #2b9eff; /* default accent */
+    --accent-1: #2b9eff;
     --accent-2: #1670d2;
     --muted: #9aa7b3;
-    --card-bg: rgba(8,10,12,0.62);
+    --card-bg: rgba(8,10,12,0.72);
     --glass: rgba(255,255,255,0.02);
+    --transition-fast: 180ms cubic-bezier(.2,.9,.3,1);
   }
 
   html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef6}
@@ -21,26 +22,27 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    background: linear-gradient(180deg,#1b1720,#0c0b0d);
     min-height:100vh;
     padding:28px;
     -webkit-font-smoothing:antialiased;
+    transition: background 650ms ease;
+    background: linear-gradient(180deg,#1b1720,#0c0b0d);
   }
 
-  /* outer shell */
+  /* shell */
   .shell{
     width:980px;
     max-width:98vw;
-    height:680px;
+    height:700px;
     border-radius:14px;
     overflow:hidden;
     display:flex;
     box-shadow: 0 30px 90px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
     backdrop-filter: blur(6px);
-    background: linear-gradient(180deg, rgba(12,12,14,0.7), rgba(6,6,8,0.7));
+    background: linear-gradient(180deg, rgba(12,12,14,0.72), rgba(6,6,8,0.72));
   }
 
-  /* left sidebar */
+  /* sidebar */
   .sidebar{
     width:220px;
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0));
@@ -51,18 +53,8 @@
     gap:14px;
     position:relative;
   }
-  .brand{
-    display:flex;
-    gap:12px;
-    align-items:center;
-  }
-  .logo{
-    width:56px;height:56px;border-radius:12px;
-    background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
-    display:flex;align-items:center;justify-content:center;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
-    flex-shrink:0;
-  }
+  .brand{ display:flex; gap:12px; align-items:center; }
+  .logo{ width:56px;height:56px;border-radius:12px; background:linear-gradient(135deg,var(--accent-1),var(--accent-2)); display:flex;align-items:center;justify-content:center; box-shadow: 0 8px 28px rgba(0,0,0,0.45); flex-shrink:0; cursor:default; }
   .logo svg{ width:40px;height:40px; }
   .brand .title{ font-weight:700; font-size:16px; letter-spacing:0.2px; }
   .brand .sub{ font-size:11px; color:var(--muted); margin-top:3px; }
@@ -87,12 +79,9 @@
   .nav-label .sub{ font-size:11px; color:var(--muted); margin-top:2px; }
 
   .spacer { flex:1 }
+  .credits{ font-size:12px; color:var(--muted); text-align:center; padding-top:8px; }
 
-  .credits{
-    font-size:12px; color:var(--muted); text-align:center; padding-top:8px;
-  }
-
-  /* main content */
+  /* main */
   .main {
     flex:1;
     padding:28px;
@@ -100,7 +89,6 @@
     flex-direction:column;
     gap:18px;
     position:relative;
-    transition: background 520ms ease;
   }
 
   .content {
@@ -115,14 +103,14 @@
     width:760px;
     max-width:calc(100% - 40px);
     border-radius:12px;
-    padding:28px;
+    padding:24px;
     background: linear-gradient(180deg, rgba(18,20,24,0.72), rgba(12,12,14,0.72));
     box-shadow: 0 20px 60px rgba(8,10,12,0.6);
     border:1px solid rgba(255,255,255,0.02);
     transition: transform 280ms cubic-bezier(.2,.9,.3,1), opacity 200ms;
   }
 
-  /* launcher (home) */
+  /* home / launcher */
   .home-center { display:flex; gap:24px; align-items:center; justify-content:center; }
   .home-info { color:#e6eef6; max-width:420px; }
   .home-info h1{ margin:0; font-size:28px; letter-spacing:0.4px; }
@@ -143,13 +131,12 @@
   .play-btn:hover{ transform: translateY(-4px) scale(1.01); filter:brightness(1.03); }
   .play-btn:active{ transform: translateY(2px) scale(.997); }
 
-  /* Versions panel */
+  /* versions */
   .versions-grid{ display:flex; flex-direction:column; gap:12px; margin-top:12px; }
   .ver-btn {
     display:flex; justify-content:space-between; align-items:center;
     padding:12px 16px; border-radius:10px; cursor:pointer; background:rgba(255,255,255,0.02);
-    transition: transform 140ms, box-shadow 140ms;
-    border:1px solid rgba(255,255,255,0.02); font-weight:700;
+    transition: transform 140ms, box-shadow 140ms; border:1px solid rgba(255,255,255,0.02); font-weight:700;
   }
   .ver-btn:hover{ transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.45); }
   .ver-btn.selected{ outline: 2px solid rgba(255,255,255,0.04); box-shadow: 0 14px 40px rgba(0,0,0,0.5); }
@@ -158,21 +145,34 @@
   .client-screen { display:flex; flex-direction:column; gap:14px; align-items:center; justify-content:center; }
   .client-screen .desc { color:var(--muted); font-size:13px; text-align:center; }
 
+  /* news panel */
+  .news-list { display:flex; flex-direction:column; gap:10px; max-height:220px; overflow:auto; padding-right:8px; }
+  .news-item { padding:10px;border-radius:8px;background:rgba(255,255,255,0.015); border:1px solid rgba(255,255,255,0.01); }
+  .news-item h4{ margin:0 0 6px 0; font-size:14px; }
+  .news-item p{ margin:0; color:var(--muted); font-size:13px; line-height:1.35; }
+
   /* settings */
   .settings-grid{ display:flex; gap:12px; align-items:center; margin-top:12px; }
   .theme-pill{ padding:8px 12px; border-radius:8px; cursor:pointer; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--muted); font-weight:700; }
   .theme-pill.active{ background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); color:white; }
 
-  /* small helpers */
-  .tiny { font-size:12px; color:var(--muted) }
-  .muted { color:var(--muted) }
+  /* loading overlay */
+  .loading-overlay{
+    position: absolute; inset:0; display:grid; place-items:center; background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px); z-index:40; opacity:0; pointer-events:none; transition: opacity 260ms;
+  }
+  .loading-overlay.show{ opacity:1; pointer-events:auto; }
+  .loader-card { padding:26px; border-radius:12px; background: linear-gradient(180deg, rgba(20,20,24,0.9), rgba(10,10,12,0.9)); border:1px solid rgba(255,255,255,0.03); text-align:center; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+  .logo-spin { width:76px; height:76px; margin:0 auto 12px; animation: spin 1700ms linear infinite; }
+  @keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
 
-  /* hover glow for logo */
-  .logo:hover{ transform:scale(1.02); transition:transform 180ms; box-shadow:0 16px 40px rgba(0,0,0,0.5); }
+  /* small */
+  .tiny{ font-size:12px; color:var(--muted) }
 
   @media (max-width:1000px){
     .shell{ flex-direction:column; height:auto; width:94vw; }
     .sidebar{ width:100%; display:flex; flex-direction:row; gap:10px; padding:12px; overflow:auto; }
+    nav.side-nav{ display:flex; flex-direction:row; gap:8px; }
     .main{ padding:18px }
     .card{ width:100% }
     .home-center{ flex-direction:column; align-items:stretch; }
@@ -181,12 +181,13 @@
 </head>
 <body>
   <div class="shell" role="application" aria-label="Avatar Launcher">
+    <!-- Sidebar -->
     <aside class="sidebar" aria-hidden="false">
       <div class="brand">
         <div class="logo" id="logoSvg" title="Avatar logo" aria-hidden="true">
-          <!-- Simple stylized A + element dots -->
+          <!-- small A + dots -->
           <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="32" cy="32" r="30" fill="white" opacity="0.06"/>
+            <circle cx="32" cy="32" r="30" fill="white" opacity="0.04"/>
             <path d="M18 46 L26 22 L32 22 L40 46 L34 46 L32 38 L28 38 L26 46 Z" fill="white" opacity="0.95"/>
             <path d="M24 22 L32 22 L28 14 Z" fill="white" opacity="0.95"/>
             <circle cx="10" cy="10" r="3.5" fill="#ff7b2e"/>
@@ -232,6 +233,7 @@
       <div class="credits">Made by Avatar</div>
     </aside>
 
+    <!-- Main -->
     <main class="main" role="main">
       <div class="content">
         <!-- LAUNCHER HOME -->
@@ -239,7 +241,14 @@
           <div class="home-center">
             <div class="home-info">
               <h1>Welcome to Avatar Launcher</h1>
-              <p>Elemental, modern launcher inspired by Lunar. Click Launch to pick a version — then press Launch again to open the client.</p>
+              <p>Elemental, modern launcher inspired by Lunar. Click Launch to choose a client version — then press Launch again to open the client.</p>
+
+              <div style="margin-top:14px;">
+                <div style="font-weight:700; margin-bottom:8px;">News</div>
+                <div id="newsContainer" class="news-list">
+                  <!-- news items populated by JS -->
+                </div>
+              </div>
             </div>
 
             <div class="play-card">
@@ -250,7 +259,7 @@
           </div>
         </section>
 
-        <!-- VERSIONS panel (appears when clicking Launch from launcher) -->
+        <!-- VERSIONS panel -->
         <section class="card" id="panel-versions" role="region" aria-label="Versions" style="display:none">
           <div style="font-weight:800;font-size:20px">Select a Version</div>
           <div class="tiny muted" style="margin-top:6px">Pick a version then press Launch below to open the web client.</div>
@@ -279,7 +288,7 @@
           </div>
         </section>
 
-        <!-- SETTINGS panel -->
+        <!-- SETTINGS -->
         <section class="card" id="panel-settings" role="region" aria-label="Settings" style="display:none">
           <div style="font-weight:800;font-size:18px">Settings</div>
           <div style="margin-top:12px" class="muted">Choose a theme (persists locally):</div>
@@ -294,26 +303,44 @@
           <div style="margin-top:14px" class="tiny muted">Theme updates the entire background and accent colors.</div>
         </section>
 
-        <!-- DISCORD panel -->
+        <!-- DISCORD -->
         <section class="card" id="panel-discord" role="region" aria-label="Discord" style="display:none">
           <div style="font-weight:800;font-size:18px">Join our Discord</div>
           <div class="muted" style="margin-top:8px">Click below to open the community invite.</div>
           <div style="height:14px"></div>
           <button class="play-btn" id="discordOpen">Open Discord</button>
         </section>
+
+        <!-- Loading overlay -->
+        <div class="loading-overlay" id="loadingOverlay" aria-hidden="true">
+          <div class="loader-card">
+            <div class="logo-spin" id="loaderLogo">
+              <!-- larger logo animated -->
+              <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="76" height="76">
+                <circle cx="32" cy="32" r="30" fill="white" opacity="0.06"/>
+                <path d="M18 46 L26 22 L32 22 L40 46 L34 46 L32 38 L28 38 L26 46 Z" fill="white" opacity="0.95"/>
+                <path d="M24 22 L32 22 L28 14 Z" fill="white" opacity="0.95"/>
+              </svg>
+            </div>
+            <div style="font-weight:800;margin-bottom:8px">Loading your element…</div>
+            <div class="tiny muted">Preparing client, please wait.</div>
+          </div>
+        </div>
+
       </div>
     </main>
   </div>
 
 <script>
 /* --------------------------
-   Avatar Launcher - behavior
+   Avatar Launcher - Full JS
    -------------------------- */
 
-/* URLs & config */
+/* Config */
 const ASTRA_URL = 'https://astraclientorg.github.io/play/js/18/';
 const MODS_REDIRECT = 'https://eaglerrinth.github.io/';
 const DISCORD_INVITE = 'https://discord.gg/ehjVwh4Zpf';
+const NEWS_JSON = 'news.json'; // optional local file (same folder) - fallback to hardcoded
 
 /* Elements */
 const navButtons = document.querySelectorAll('.nav-btn');
@@ -328,32 +355,34 @@ const launcherLaunchBtn = document.getElementById('launcherLaunch');
 const versionsGrid = document.getElementById('versionsGrid');
 const versionsLaunchBtn = document.getElementById('versionsLaunch');
 const versionError = document.getElementById('versionError');
+const loadingOverlay = document.getElementById('loadingOverlay');
+const newsContainer = document.getElementById('newsContainer');
+
 let selectedVersionBtn = null;
 
-/* sound feedback via WebAudio (subtle click) */
+/* click sound (small oscillator) */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playClick(){
   try{
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
-    o.type = 'sine';
+    o.type = 'triangle';
     o.frequency.value = 880;
     g.gain.value = 0.0001;
     o.connect(g);
     g.connect(audioCtx.destination);
     const now = audioCtx.currentTime;
     g.gain.setValueAtTime(0.0001, now);
-    g.gain.exponentialRampToValueAtTime(0.03, now + 0.007);
+    g.gain.exponentialRampToValueAtTime(0.03, now + 0.005);
     o.start(now);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
-    o.stop(now + 0.16);
-  }catch(e){ /* ignore on browsers where autoplay is blocked */ }
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+    o.stop(now + 0.13);
+  }catch(e){}
 }
 
-/* Tab activation (sidebar). Mods auto-redirect */
+/* TAB activation */
 function activateTab(name){
   navButtons.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-  // hide all panels except chosen; special-case: mods (redirect)
   if(name === 'mods'){
     window.open(MODS_REDIRECT, '_blank');
     playClick();
@@ -363,31 +392,26 @@ function activateTab(name){
   if(panels[name]) panels[name].style.display = 'block';
   playClick();
 }
-/* wire up nav */
 navButtons.forEach(btn=>{
   btn.addEventListener('click', ()=> activateTab(btn.dataset.tab));
   btn.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }});
 });
-
-/* default */
 activateTab('launcher');
 
-/* launcher Launch -> show Versions panel */
+/* Launch -> open Versions panel */
 launcherLaunchBtn.addEventListener('click', ()=>{
-  activateTab(''); // remove active highlight
-  // show versions panel (which is not a sidebar tab)
   Object.values(panels).forEach(p => { if(p) p.style.display = 'none'; });
   panels.versions.style.display = 'block';
+  // de-highlight sidebar active
+  navButtons.forEach(b => b.classList.remove('active'));
   playClick();
 });
 
-/* Choose version logic */
+/* Version selection */
 versionsGrid.addEventListener('click', (e)=>{
   let el = e.target;
-  // walk up to .ver-btn
   while(el && !el.classList.contains('ver-btn')) el = el.parentElement;
   if(!el) return;
-  // toggle selection
   if(selectedVersionBtn) selectedVersionBtn.classList.remove('selected');
   selectedVersionBtn = el;
   el.classList.add('selected');
@@ -395,37 +419,44 @@ versionsGrid.addEventListener('click', (e)=>{
   playClick();
 });
 
-/* Launch selected version */
+/* Launch selected version with loading screen */
 versionsLaunchBtn.addEventListener('click', ()=>{
-  if(!selectedVersionBtn){
-    versionError.style.display = 'block';
-    return;
-  }
+  if(!selectedVersionBtn){ versionError.style.display = 'block'; playClick(); return; }
   const url = selectedVersionBtn.dataset.url;
-  if(url) window.open(url, '_blank');
+  if(!url) return;
+  // show loading overlay
+  showLoading();
+  // simulate small prep time, then open
+  setTimeout(()=>{
+    hideLoading();
+    window.open(url, '_blank');
+  }, 1400);
   playClick();
 });
 
 /* Client play */
 document.getElementById('clientPlay').addEventListener('click', ()=>{
-  window.open(ASTRA_URL, '_blank');
+  showLoading();
+  setTimeout(()=>{ hideLoading(); window.open(ASTRA_URL,'_blank'); }, 900);
   playClick();
 });
 
-/* Discord open */
+/* Discord */
 document.getElementById('discordOpen').addEventListener('click', ()=>{
-  window.open(DISCORD_INVITE, '_blank');
+  window.open(DISCORD_INVITE,'_blank');
   playClick();
 });
 
-/* Theme handling (changes entire background + accents) */
+/* Loading overlay control */
+function showLoading(){ loadingOverlay.classList.add('show'); loadingOverlay.setAttribute('aria-hidden','false'); }
+function hideLoading(){ loadingOverlay.classList.remove('show'); loadingOverlay.setAttribute('aria-hidden','true'); }
+
+/* Theme handling (entire background + accents) */
 const themeButtons = document.querySelectorAll('.theme-pill');
 const subText = document.getElementById('subText');
 const logoEl = document.querySelector('.logo');
-const mainEl = document.querySelector('.main');
 
 function setTheme(theme){
-  // smooth background transitions
   if(theme === 'blue'){
     document.body.style.background = 'linear-gradient(180deg,#05243a,#023a62 60%, #a6e8ff 100%)';
     document.documentElement.style.setProperty('--accent-1','#6ad0ff');
@@ -451,7 +482,6 @@ function setTheme(theme){
     subText.textContent = 'Air • Light • Open';
     logoEl.style.background = 'linear-gradient(135deg,#ffffff,#dfefff)';
   } else {
-    // normal
     document.body.style.background = 'linear-gradient(180deg,#1b1720,#0c0b0d)';
     document.documentElement.style.setProperty('--accent-1','#2b9eff');
     document.documentElement.style.setProperty('--accent-2','#1670d2');
@@ -459,7 +489,6 @@ function setTheme(theme){
     logoEl.style.background = 'linear-gradient(135deg,var(--accent-1),var(--accent-2))';
   }
 
-  // update play buttons to use accent colors
   document.querySelectorAll('.play-btn').forEach(b=>{
     b.style.background = `linear-gradient(90deg,var(--accent-1),var(--accent-2))`;
   });
@@ -468,40 +497,63 @@ function setTheme(theme){
   localStorage.setItem('avatar_theme', theme);
   playClick();
 }
-
-/* wire theme buttons */
-themeButtons.forEach(btn => {
-  btn.addEventListener('click', ()=> setTheme(btn.dataset.theme));
-});
-
-/* load saved theme */
+themeButtons.forEach(btn => btn.addEventListener('click', ()=> setTheme(btn.dataset.theme)));
 const savedTheme = localStorage.getItem('avatar_theme') || 'normal';
 setTheme(savedTheme);
 
-/* accessibility: arrow nav through nav buttons */
+/* News loader: try local news.json, fallback to hardcoded */
+const fallbackNews = [
+  { title: 'Elemental Update', body: 'New launcher UI rolled out — themes and version launcher available.' },
+  { title: 'Mods Coming Soon', body: 'Mods integration will arrive soon — stay tuned on Discord.' }
+];
+
+function renderNews(list){
+  newsContainer.innerHTML = '';
+  list.forEach(item=>{
+    const div = document.createElement('div');
+    div.className = 'news-item';
+    div.innerHTML = `<h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.body)}</p>`;
+    newsContainer.appendChild(div);
+  });
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
+
+fetch(NEWS_JSON).then(r=>{
+  if(!r.ok) throw new Error('No local news');
+  return r.json();
+}).then(data=>{
+  if(Array.isArray(data) && data.length) renderNews(data); else renderNews(fallbackNews);
+}).catch(_=>{
+  renderNews(fallbackNews);
+});
+
+/* Keyboard nav for sidebar */
 document.addEventListener('keydown', (e)=>{
   const activeIndex = Array.from(navButtons).findIndex(b=>b.classList.contains('active'));
   if(e.key === 'ArrowDown'){ const next = (activeIndex+1) % navButtons.length; navButtons[next].click(); }
   if(e.key === 'ArrowUp'){ const prev = (activeIndex-1 + navButtons.length) % navButtons.length; navButtons[prev].click(); }
 });
 
-/* small entry animations */
+/* small entry fade */
 document.querySelectorAll('.card').forEach((c,i)=>{
   c.style.opacity = 0;
   c.style.transform = 'translateY(8px)';
-  setTimeout(()=>{ c.style.transition = 'opacity 420ms ease, transform 420ms ease'; c.style.opacity = ''; c.style.transform = ''; }, 60 + i*60);
+  setTimeout(()=>{ c.style.transition = 'opacity 420ms ease, transform 420ms ease'; c.style.opacity = ''; c.style.transform = ''; }, 80 + i*60);
 });
 
-/* keyboard activation for version buttons and nav */
-document.addEventListener('click', (e) => {
-  if(e.target.classList.contains('ver-btn')) return;
-});
+/* make certain things keyboard-accessible */
 document.querySelectorAll('.ver-btn, .nav-btn, .play-btn, .theme-pill').forEach(el=>{
   el.tabIndex = 0;
-  el.addEventListener('keydown', (ev)=>{
-    if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); el.click(); }
-  });
+  el.addEventListener('keydown', (ev)=>{ if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); el.click(); } });
 });
+
+/* accessibility: announce loading (aria) */
+const observer = new MutationObserver(()=>{ /* placeholder if later needed */ });
+observer.observe(loadingOverlay, { attributes:true, attributeFilter:['class'] });
+
+/* helper: open Eagler mods on Mods press already handled by activateTab */
+
+/* end */
 </script>
 </body>
 </html>
