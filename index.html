@@ -6,83 +6,49 @@
 <title>Avatar Launcher</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%; font-family:Inter,system-ui,-apple-system,Segoe UI, Roboto, "Helvetica Neue", Arial; overflow:hidden;}
+body{display:flex; background: linear-gradient(45deg, #ff4e50, #f9d423); transition: background 0.5s;}
 
-  /* ---------- Reset & base ---------- */
-  *{box-sizing:border-box;margin:0;padding:0}
-  html, body{height:100%; font-family:Inter,system-ui,-apple-system,Segoe UI, Roboto, "Helvetica Neue", Arial; overflow:hidden;}
-  body{display:flex; background: linear-gradient(45deg, #ff4e50, #f9d423); transition: background 0.5s;}
+.launcher{width:900px; max-width:95%; height:600px; display:flex; border-radius:16px;
+background: rgba(15,15,20,0.95); box-shadow:0 20px 50px rgba(0,0,0,0.5); overflow:hidden; position:relative;}
 
-  /* ---------- launcher window ---------- */
-  .launcher{
-    width: 900px; max-width: 95%; height: 600px; display:flex; border-radius:16px;
-    background: rgba(15,15,20,0.95); box-shadow:0 20px 50px rgba(0,0,0,0.5); overflow:hidden;
-  }
+.sidebar{width:200px; background: rgba(0,0,0,0.6); display:flex; flex-direction:column; padding:20px; gap:16px;}
+.sidebar button{padding:12px 16px; border:none; border-radius:10px; background: rgba(255,255,255,0.05); color:white; font-weight:600; cursor:pointer; transition: all 0.3s;}
+.sidebar button:hover{background: rgba(255,255,255,0.15);}
+.sidebar button.active{background: rgba(255,255,255,0.2);}
 
-  /* ---------- sidebar ---------- */
-  .sidebar{
-    width: 200px; background: rgba(0,0,0,0.6); display:flex; flex-direction:column;
-    padding:20px; gap:16px;
-  }
-  .sidebar button{
-    padding:12px 16px; border:none; border-radius:10px; background: rgba(255,255,255,0.05);
-    color:white; font-weight:600; cursor:pointer; transition: all 0.3s;
-  }
-  .sidebar button:hover{background: rgba(255,255,255,0.15);}
-  .sidebar button.active{background: rgba(255,255,255,0.2);}
+.main{flex:1; padding:20px; display:flex; flex-direction:column; position:relative;}
+.tabContent{flex:1; display:none; overflow:auto;}
+.tabContent.active{display:block; animation: fadeIn 0.4s ease forwards;}
+@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 
-  /* ---------- main content ---------- */
-  .main{flex:1; padding:20px; display:flex; flex-direction:column; position:relative;}
-  .tabContent{flex:1; display:none; overflow:auto;}
-  .tabContent.active{display:block; animation: fadeIn 0.4s ease forwards;}
-  @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+.header{display:flex; align-items:center; gap:12px; margin-bottom:20px;}
+.logo{width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+font-weight:700; font-size:28px; color:white; background: linear-gradient(45deg,#ff9a00,#ff4e50);
+box-shadow:0 5px 20px rgba(0,0,0,0.4); transition: background 0.5s;}
+.titleContainer{display:flex; flex-direction:column;}
+.title{font-weight:700; font-size:20px; color:white;}
+.subtitle{font-size:12px; color:rgba(255,255,255,0.7); transition: color 0.5s;}
 
-  /* ---------- header/logo ---------- */
-  .header{display:flex; align-items:center; gap:12px; margin-bottom:20px;}
-  .logo{
-    width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-weight:700; font-size:28px; color:white; background: linear-gradient(45deg,#ff9a00,#ff4e50);
-    box-shadow:0 5px 20px rgba(0,0,0,0.4); transition: background 0.5s;
-  }
-  .titleContainer{display:flex; flex-direction:column;}
-  .title{font-weight:700; font-size:20px; color:white;}
-  .subtitle{font-size:12px; color:rgba(255,255,255,0.7); transition: color 0.5s;}
+.versionCards{display:grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap:16px;}
+.versionCard{background: rgba(255,255,255,0.05); padding:20px; border-radius:12px; cursor:pointer; text-align:center; color:white; font-weight:600; transition: all 0.3s; box-shadow:0 0 0 rgba(0,0,0,0);}
+.versionCard:hover{transform: translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.5);}
+.versionCard.selected{background: rgba(255,255,255,0.2);}
 
-  /* ---------- version cards ---------- */
-  .versionCards{display:grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap:16px;}
-  .versionCard{
-    background: rgba(255,255,255,0.05); padding:20px; border-radius:12px; cursor:pointer;
-    text-align:center; color:white; font-weight:600; transition: all 0.3s; box-shadow:0 0 0 rgba(0,0,0,0);
-  }
-  .versionCard:hover{transform: translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.5);}
-  .versionCard.selected{background: rgba(255,255,255,0.2);}
+.launchButton{margin-top:20px; padding:14px; border:none; border-radius:12px; font-weight:700; font-size:16px; cursor:pointer; background: linear-gradient(90deg,#ff9a00,#ff4e50); color:white; transition: all 0.3s;}
+.launchButton:hover{transform: translateY(-3px); box-shadow:0 10px 20px rgba(0,0,0,0.5);}
 
-  /* ---------- launch button ---------- */
-  .launchButton{
-    margin-top:20px; padding:14px; border:none; border-radius:12px; font-weight:700; font-size:16px;
-    cursor:pointer; background: linear-gradient(90deg,#ff9a00,#ff4e50); color:white; transition: all 0.3s;
-  }
-  .launchButton:hover{transform: translateY(-3px); box-shadow:0 10px 20px rgba(0,0,0,0.5);}
+.loadingOverlay{position:absolute; inset:0; background: rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; color:white; font-size:18px; font-weight:600; display:none;}
+.loader{border:4px solid rgba(255,255,255,0.2); border-top:4px solid white; border-radius:50%; width:40px; height:40px; animation: spin 1s linear infinite;}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
-  /* ---------- loading overlay ---------- */
-  .loadingOverlay{
-    position:absolute; inset:0; background: rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center;
-    flex-direction:column; gap:10px; color:white; font-size:18px; font-weight:600; display:none;
-  }
-  .loader{
-    border:4px solid rgba(255,255,255,0.2);
-    border-top:4px solid white;
-    border-radius:50%; width:40px; height:40px; animation: spin 1s linear infinite;
-  }
-  @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.discordContent{text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;}
+.discordContent a{background: rgba(255,255,255,0.1); padding:12px 20px; border-radius:10px; color:white; text-decoration:none; font-weight:600; transition: all 0.3s;}
+.discordContent a:hover{background: rgba(255,255,255,0.2);}
 
-  /* ---------- discord tab ---------- */
-  .discordContent{text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;}
-  .discordContent a{background: rgba(255,255,255,0.1); padding:12px 20px; border-radius:10px; color:white; text-decoration:none; font-weight:600; transition: all 0.3s;}
-  .discordContent a:hover{background: rgba(255,255,255,0.2);}
-
-  /* ---------- footer ---------- */
-  .footer{text-align:center; font-size:12px; color:rgba(255,255,255,0.7); margin-top:10px;}
+.footer{text-align:center; font-size:12px; color:rgba(255,255,255,0.7); margin-top:10px;}
 </style>
 </head>
 <body>
@@ -114,14 +80,13 @@
 
     <!-- Launcher Tab -->
     <div id="launcherTab" class="tabContent active">
-      <div class="versionCards" id="versionCards">
-        <!-- JS will populate version cards -->
-      </div>
+      <div class="versionCards" id="versionCards"></div>
+      <button class="launchButton" id="launchVersionBtn">Launch Selected Version</button>
     </div>
 
     <!-- Client Tab -->
     <div id="clientTab" class="tabContent">
-      <button class="launchButton" id="clientLaunchBtn">Launch Selected Version</button>
+      <button class="launchButton" id="clientLaunchBtn">Launch Client</button>
     </div>
 
     <!-- Discord Tab -->
@@ -143,13 +108,13 @@
 </div>
 
 <script>
+// Sidebar tab switching
 const tabs = document.querySelectorAll('.sidebar button');
 const tabContents = document.querySelectorAll('.tabContent');
 const logo = document.querySelector('.logo');
 const subtitle = document.querySelector('.subtitle');
 const body = document.body;
 
-// Sidebar tab switching
 tabs.forEach(btn=>{
   btn.addEventListener('click', ()=>{
     tabs.forEach(b=>b.classList.remove('active'));
@@ -187,10 +152,10 @@ versions.forEach(v=>{
   versionCardsContainer.appendChild(card);
 });
 
-// Launch button in client tab
-const clientLaunchBtn = document.getElementById('clientLaunchBtn');
+// Launch button in Launcher tab
+const launchVersionBtn = document.getElementById('launchVersionBtn');
 const loadingOverlay = document.getElementById('loadingOverlay');
-clientLaunchBtn.addEventListener('click', ()=>{
+launchVersionBtn.addEventListener('click', ()=>{
   if(!selectedVersion){
     alert('Please select a version first!');
     return;
@@ -199,7 +164,13 @@ clientLaunchBtn.addEventListener('click', ()=>{
   setTimeout(()=>{
     loadingOverlay.style.display='none';
     window.open(selectedVersion.url,'_blank');
-  },1500); // animated loading screen
+  },1500);
+});
+
+// Client tab launch (you can adapt)
+document.getElementById('clientLaunchBtn').addEventListener('click', ()=>{
+  loadingOverlay.style.display='flex';
+  setTimeout(()=>{ loadingOverlay.style.display='none'; alert('Client launched!'); },1500);
 });
 
 // Theme switching
