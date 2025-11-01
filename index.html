@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Eaglecraft Launcher — Lunar Style</title>
+<title>Cosmic Launcher</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
@@ -54,15 +54,10 @@
     font-weight:700;color:white;box-shadow:0 6px 24px rgba(46,160,67,0.12);
   }
   .title { font-weight:700; letter-spacing:0.2px; font-size:18px; }
-  .subtitle { color:#8b949e; font-size:12px; margin-top:4px; }
+  .subtitle { color:#8b949e; font-size:12px; margin-top:4px; transition: color 0.3s; }
   .header-right { margin-left:auto; display:flex; gap:10px; align-items:center; }
 
-  .body {
-    display:grid;
-    grid-template-columns: 320px 1fr;
-    gap:20px;
-    padding:22px;
-  }
+  .body { display:grid; grid-template-columns: 320px 1fr; gap:20px; padding:22px; }
 
   .sidebar {
     background: linear-gradient(180deg, rgba(255,255,255,0.015), transparent);
@@ -79,30 +74,17 @@
     color:inherit; outline:none;
   }
 
-  .main {
-    padding:14px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-    min-height:240px; display:flex; flex-direction:column;
-  }
+  .main { padding:14px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); min-height:240px; display:flex; flex-direction:column; }
 
-  .tabs {
-    display:flex; gap:8px; margin-bottom:12px;
-  }
-  .tab {
-    padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; font-size:13px;
-    color:#aebecd; background:transparent; border:1px solid transparent;
-    transition: all 160ms ease;
-  }
+  .tabs { display:flex; gap:8px; margin-bottom:12px; }
+  .tab { padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; font-size:13px; color:#aebecd; background:transparent; border:1px solid transparent; transition: all 160ms ease; }
   .tab:hover { transform:translateY(-3px); }
   .tab.active { background: linear-gradient(90deg, rgba(88,166,255,0.12), rgba(88,166,255,0.06)); color:#58a6ff; border:1px solid rgba(88,166,255,0.08); box-shadow:0 6px 18px rgba(8,12,20,0.4); }
 
   .card { background:#0d1116; border-radius:10px; padding:14px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.02); box-shadow: 0 8px 24px rgba(2,6,23,0.45); }
 
   .launch-row { display:flex; gap:12px; align-items:center; margin-top:auto; }
-  .launch-btn {
-    flex:1; padding:14px 18px; border-radius:10px; border:none; font-weight:700; cursor:pointer;
-    background: linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; box-shadow: 0 8px 24px rgba(46,160,67,0.14);
-    position:relative; overflow:hidden; transition:transform 180ms ease;
-  }
+  .launch-btn { flex:1; padding:14px 18px; border-radius:10px; border:none; font-weight:700; cursor:pointer; background: linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; box-shadow: 0 8px 24px rgba(46,160,67,0.14); position:relative; overflow:hidden; transition:transform 180ms ease; }
   .launch-btn:hover { transform:translateY(-4px); }
 
   .small-btn { padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:#9fb7ff; cursor:pointer; }
@@ -114,99 +96,102 @@
 </style>
 </head>
 <body>
-  <div class="launcher" role="application" aria-label="Eaglecraft Launcher">
-    <div class="header">
-      <div class="logo">E</div>
-      <div>
-        <div class="title">Eaglecraft Launcher</div>
-        <div class="subtitle">Lunar-style • Lightweight • Mods ready</div>
-      </div>
-      <div class="header-right">
-        <button class="small-btn" id="importPresetBtn">Import</button>
-        <button class="small-btn" id="exportPresetBtn">Export</button>
+<div class="launcher">
+  <div class="header">
+    <div class="logo">C</div>
+    <div>
+      <div class="title">Cosmic Launcher</div>
+      <div class="subtitle" id="headerSubtitle">Cosmic</div>
+    </div>
+    <div class="header-right">
+      <button class="small-btn" id="importPresetBtn">Import</button>
+      <button class="small-btn" id="exportPresetBtn">Export</button>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="sidebar">
+      <h3>Play Controls</h3>
+      <div class="version-box card">
+        <label class="muted">Minecraft Version</label>
+        <select id="versionSelect">
+          <option value="">— Select —</option>
+          <option value="1.5.2">1.5.2</option>
+          <option value="1.8.8">1.8.8</option>
+          <option value="1.12.2">1.12.2</option>
+        </select>
+        <div class="spacer"></div>
+        <label class="muted">Upload Eaglecraft HTML</label>
+        <input type="file" id="fileInput" accept=".html,.htm" />
+        <div id="fileName" class="muted center" style="margin-top:8px;">No file chosen</div>
       </div>
     </div>
 
-    <div class="body">
-      <div class="sidebar">
-        <h3>Play Controls</h3>
-        <div class="version-box card">
-          <label class="muted">Minecraft Version</label>
-          <select id="versionSelect">
-            <option value="">— Select —</option>
-            <option value="1.5.2">1.5.2</option>
-            <option value="1.8.8">1.8.8</option>
-            <option value="1.12.2">1.12.2</option>
-          </select>
-          <div class="spacer"></div>
-          <label class="muted">Upload Eaglecraft HTML</label>
-          <input type="file" id="fileInput" accept=".html,.htm" />
-          <div id="fileName" class="muted center" style="margin-top:8px;">No file chosen</div>
-        </div>
+    <div class="main">
+      <div class="tabs" role="tablist">
+        <div class="tab active" data-tab="home">Home</div>
+        <div class="tab" data-tab="client">Client</div>
+        <div class="tab" data-tab="mods">Mods</div>
+        <div class="tab" data-tab="settings">Settings</div>
       </div>
 
-      <div class="main">
-        <div class="tabs" role="tablist">
-          <div class="tab active" data-tab="home">Home</div>
-          <div class="tab" data-tab="client">Client</div>
-          <div class="tab" data-tab="mods">Mods</div>
-          <div class="tab" data-tab="settings">Settings</div>
+      <div id="contentArea" style="flex:1;overflow:auto;">
+        <div id="homeTab" class="tabContent">
+          <div class="card center"><b>Welcome to Cosmic Launcher</b><br>Select a version, upload your HTML client, and launch.</div>
+          <div class="card center">
+            <div class="launch-row">
+              <button class="launch-btn" id="launchBtn">Launch</button>
+              <button class="small-btn" id="viewModsBtn">View</button>
+            </div>
+            <div id="errorArea" class="error" style="display:none"></div>
+          </div>
         </div>
 
-        <div id="contentArea" style="flex:1;overflow:auto;">
-          <div id="homeTab" class="tabContent">
-            <div class="card center"><b>Welcome to Eaglecraft Launcher</b><br>Select a version, upload your HTML client, and launch.</div>
-            <div class="card center">
-              <div class="launch-row">
-                <button class="launch-btn" id="launchBtn">Launch</button>
-                <button class="small-btn" id="viewModsBtn">View</button>
-              </div>
-              <div id="errorArea" class="error" style="display:none"></div>
+        <div id="clientTab" class="tabContent" style="display:none;">
+          <div class="card center">
+            <div style="font-weight:700;font-size:16px;">Available Clients</div>
+            <div class="muted" style="margin-top:6px;">Click to launch any client:</div>
+            <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
+              <button class="launch-btn" onclick="window.open('https://resent4-0.vercel.app/','_blank')">Resent Client</button>
+              <button class="launch-btn" onclick="window.open('https://starlike.zumbiepig.dev/','_blank')">Starlike</button>
+              <button class="launch-btn" onclick="window.open('https://eaglerhackedclients.vercel.app/PiClient-v1%20(1).1-20230123-intl.html','_blank')">Pi Client</button>
             </div>
           </div>
+        </div>
 
-          <div id="clientTab" class="tabContent" style="display:none;">
-            <div class="card center">
-              <div style="font-weight:700;font-size:16px;">Client Launcher</div>
-              <div class="muted" style="margin-top:6px;">Access Astra client directly below.</div>
-              <div style="margin-top:16px;">
-                <button class="launch-btn" id="astraBtn" style="width:180px;">Launch Astra</button>
-              </div>
-            </div>
+        <div id="modsTab" class="tabContent" style="display:none;">
+          <div class="card center">
+            <div style="font-weight:700;font-size:16px;">Mods</div>
+            <div class="muted" style="margin-top:6px;">Coming soon…</div>
           </div>
+        </div>
 
-          <div id="modsTab" class="tabContent" style="display:none;">
-            <div class="card center">
-              <div style="font-weight:700;font-size:16px;">Mods</div>
-              <div class="muted" style="margin-top:6px;">Coming soon…</div>
+        <div id="settingsTab" class="tabContent" style="display:none;">
+          <div class="card">
+            <div style="font-weight:700;">Settings</div>
+            <div class="muted" style="margin-top:8px">Local options below.</div>
+            <div style="margin-top:12px;">
+              <label class="muted">Auto-close launcher after launch</label><br>
+              <label class="switch">
+                <input type="checkbox" id="autoCloseToggle">
+                <span class="slider"></span>
+              </label>
             </div>
-          </div>
-
-          <div id="settingsTab" class="tabContent" style="display:none;">
-            <div class="card">
-              <div style="font-weight:700;">Settings</div>
-              <div class="muted" style="margin-top:8px">Local options below.</div>
-              <div style="margin-top:12px;">
-                <label class="muted">Auto-close launcher after launch</label><br>
-                <label class="switch">
-                  <input type="checkbox" id="autoCloseToggle">
-                  <span class="slider"></span>
-                </label>
-              </div>
-              <div style="margin-top:18px;">
-                <label class="muted">Theme Color</label><br>
-                <select id="themeSelect" style="margin-top:6px;width:100%;padding:8px;border-radius:8px;background:#0b0d11;color:inherit;">
-                  <option value="blue">Blue</option>
-                  <option value="red">Red</option>
-                  <option value="orange">Orange</option>
-                </select>
-              </div>
+            <div style="margin-top:18px;">
+              <label class="muted">Theme Color</label><br>
+              <select id="themeSelect" style="margin-top:6px;width:100%;padding:8px;border-radius:8px;background:#0b0d11;color:inherit;">
+                <option value="purple">Purple</option>
+                <option value="green">Green</option>
+                <option value="yellow">Yellow</option>
+                <option value="blue">Blue</option>
+              </select>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
 <script>
 const $ = s=>document.querySelector(s); const $$=s=>document.querySelectorAll(s);
@@ -214,12 +199,14 @@ const $ = s=>document.querySelector(s); const $$=s=>document.querySelectorAll(s)
 /* --- Theme logic --- */
 function applyTheme(theme){
   const root=document.documentElement;
-  if(theme==='red'){ root.style.setProperty('--accent1','#c62828'); root.style.setProperty('--accent2','#ef5350'); }
-  else if(theme==='orange'){ root.style.setProperty('--accent1','#ef6c00'); root.style.setProperty('--accent2','#ff9800'); }
-  else { root.style.setProperty('--accent1','#238636'); root.style.setProperty('--accent2','#2ea043'); }
-  localStorage.setItem('eagle_theme',theme);
+  const subtitle=$('#headerSubtitle');
+  if(theme==='purple'){ root.style.setProperty('--accent1','#6a1b9a'); root.style.setProperty('--accent2','#ab47bc'); subtitle.style.color='#ab47bc'; }
+  else if(theme==='green'){ root.style.setProperty('--accent1','#2e7d32'); root.style.setProperty('--accent2','#66bb6a'); subtitle.style.color='#66bb6a'; }
+  else if(theme==='yellow'){ root.style.setProperty('--accent1','#f9a825'); root.style.setProperty('--accent2','#ffeb3b'); subtitle.style.color='#ffeb3b'; }
+  else{ root.style.setProperty('--accent1','#238636'); root.style.setProperty('--accent2','#2ea043'); subtitle.style.color='#2ea043'; }
+  localStorage.setItem('cosmic_theme',theme);
 }
-const savedTheme=localStorage.getItem('eagle_theme')||'blue';
+const savedTheme=localStorage.getItem('cosmic_theme')||'blue';
 $('#themeSelect').value=savedTheme;
 applyTheme(savedTheme);
 $('#themeSelect').addEventListener('change',e=>applyTheme(e.target.value));
@@ -233,23 +220,17 @@ $$('.tab').forEach(t=>t.addEventListener('click',()=>{
   $('#'+name+'Tab').style.display='block';
 }));
 
-/* --- Astra button --- */
-$('#astraBtn').addEventListener('click',()=>{ window.open('https://astraclientorg.github.io/play/js/18/','_blank'); });
-
 /* --- Auto close toggle --- */
-$('#autoCloseToggle').checked=(localStorage.getItem('eagle_auto_close')==='true');
-$('#autoCloseToggle').addEventListener('change',e=>{
-  localStorage.setItem('eagle_auto_close',e.target.checked?'true':'false');
-});
+$('#autoCloseToggle').checked=(localStorage.getItem('cosmic_auto_close')==='true');
+$('#autoCloseToggle').addEventListener('change',e=>localStorage.setItem('cosmic_auto_close',e.target.checked?'true':'false'));
 
-/* --- Launch Button (kept basic functionality) --- */
+/* --- Launch Button --- */
 $('#launchBtn').addEventListener('click',()=>{
   const version=$('#versionSelect').value.trim();
   const file=$('#fileInput').files[0];
-  const err=$('#errorArea');
-  err.style.display='none';
+  const err=$('#errorArea'); err.style.display='none';
   if(!version){err.textContent='Select version.';err.style.display='block';return;}
-  if(!file){err.textContent='Upload your Eaglecraft HTML client.';err.style.display='block';return;}
+  if(!file){err.textContent='Upload your HTML client.';err.style.display='block';return;}
   const reader=new FileReader();
   reader.onload=()=>{
     const modsObj={}; const meta={version,timestamp:Date.now()};
@@ -257,9 +238,8 @@ $('#launchBtn').addEventListener('click',()=>{
     let html=reader.result;
     if(/<head/i.test(html)) html=html.replace(/<head/i,`<head\n${injection}`);
     else html=injection+html;
-    const blob=new Blob([html],{type:'text/html'}); const url=URL.createObjectURL(blob);
-    window.open(url,'_blank');
-    if(localStorage.getItem('eagle_auto_close')==='true'){setTimeout(()=>window.close(),600);}
+    const blob=new Blob([html],{type:'text/html'}); window.open(URL.createObjectURL(blob),'_blank');
+    if(localStorage.getItem('cosmic_auto_close')==='true'){setTimeout(()=>window.close(),600);}
   };
   reader.readAsText(file);
 });
