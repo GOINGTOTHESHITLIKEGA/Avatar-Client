@@ -9,13 +9,11 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
   :root{
-    --bg-grad: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.35));
-    --accent-1: #2b9eff;   /* default Normal uses blue-ish accents */
+    --accent-1: #2b9eff; /* default accent */
     --accent-2: #1670d2;
     --muted: #9aa7b3;
-    --panel: rgba(10,10,12,0.6);
-    --glass: rgba(255,255,255,0.03);
-    --card: rgba(8,9,12,0.6);
+    --card-bg: rgba(8,10,12,0.62);
+    --glass: rgba(255,255,255,0.02);
   }
 
   html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef6}
@@ -23,25 +21,23 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    background:
-      radial-gradient(800px 300px at 15% 10%, rgba(255,220,160,0.06), transparent 20%),
-      linear-gradient(180deg,#3b0f00,#9b2b00 40%, #ff9b1f 100%);
+    background: linear-gradient(180deg,#1b1720,#0c0b0d);
     min-height:100vh;
     padding:28px;
     -webkit-font-smoothing:antialiased;
   }
 
-  /* launcher shell */
+  /* outer shell */
   .shell{
     width:980px;
     max-width:98vw;
-    height:640px;
+    height:680px;
     border-radius:14px;
     overflow:hidden;
     display:flex;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    box-shadow: 0 30px 90px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
     backdrop-filter: blur(6px);
-    background: linear-gradient(180deg, rgba(12,12,14,0.55), rgba(6,6,8,0.6));
+    background: linear-gradient(180deg, rgba(12,12,14,0.7), rgba(6,6,8,0.7));
   }
 
   /* left sidebar */
@@ -67,15 +63,15 @@
     box-shadow: 0 8px 28px rgba(0,0,0,0.45);
     flex-shrink:0;
   }
-  .logo svg { width:40px;height:40px; }
+  .logo svg{ width:40px;height:40px; }
   .brand .title{ font-weight:700; font-size:16px; letter-spacing:0.2px; }
   .brand .sub{ font-size:11px; color:var(--muted); margin-top:3px; }
 
-  nav.side-nav{ display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+  nav.side-nav{ display:flex; flex-direction:column; gap:8px; margin-top:8px; }
   .nav-btn{
     display:flex; gap:12px; align-items:center; padding:10px 12px; border-radius:10px;
-    cursor:pointer; color: #dfe9f8; font-weight:600; font-size:13px;
-    transition: all 180ms cubic-bezier(.2,.9,.3,1);
+    cursor:pointer; color: #dfe9f8; font-weight:700; font-size:13px;
+    transition: transform 180ms cubic-bezier(.2,.9,.3,1), background 180ms;
     border: 1px solid transparent;
   }
   .nav-btn:hover{ transform: translateX(6px); background: rgba(255,255,255,0.02); }
@@ -84,7 +80,7 @@
     border:1px solid rgba(255,255,255,0.04);
     box-shadow: 0 8px 20px rgba(0,0,0,0.45);
   }
-  .nav-icon{ width:28px; height:28px; display:grid; place-items:center; opacity:0.95; }
+  .nav-icon{ width:28px; height:28px; display:grid; place-items:center; font-size:16px; }
 
   .nav-label{ display:flex; flex-direction:column; line-height:1; }
   .nav-label .main{ font-weight:700; font-size:13px; }
@@ -96,14 +92,15 @@
     font-size:12px; color:var(--muted); text-align:center; padding-top:8px;
   }
 
-  /* main content area */
+  /* main content */
   .main {
     flex:1;
     padding:28px;
     display:flex;
     flex-direction:column;
     gap:18px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    position:relative;
+    transition: background 520ms ease;
   }
 
   .content {
@@ -115,19 +112,19 @@
   }
 
   .card{
-    width:720px;
+    width:760px;
     max-width:calc(100% - 40px);
     border-radius:12px;
     padding:28px;
-    background: linear-gradient(180deg, rgba(18,20,24,0.6), rgba(12,12,14,0.6));
+    background: linear-gradient(180deg, rgba(18,20,24,0.72), rgba(12,12,14,0.72));
     box-shadow: 0 20px 60px rgba(8,10,12,0.6);
     border:1px solid rgba(255,255,255,0.02);
     transition: transform 280ms cubic-bezier(.2,.9,.3,1), opacity 200ms;
   }
 
-  /* launcher home layout */
+  /* launcher (home) */
   .home-center { display:flex; gap:24px; align-items:center; justify-content:center; }
-  .home-info { color:#e6eef6; max-width:360px; }
+  .home-info { color:#e6eef6; max-width:420px; }
   .home-info h1{ margin:0; font-size:28px; letter-spacing:0.4px; }
   .home-info p{ margin:10px 0 0; color:var(--muted); font-size:13px; line-height:1.5; }
 
@@ -141,16 +138,28 @@
     border-radius:12px; color:white; cursor:pointer; border:none;
     background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
     box-shadow: 0 12px 40px rgba(0,0,0,0.45);
-    transition: transform 160ms ease, box-shadow 160ms ease;
+    transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms;
   }
+  .play-btn:hover{ transform: translateY(-4px) scale(1.01); filter:brightness(1.03); }
   .play-btn:active{ transform: translateY(2px) scale(.997); }
 
-  /* client screen */
+  /* Versions panel */
+  .versions-grid{ display:flex; flex-direction:column; gap:12px; margin-top:12px; }
+  .ver-btn {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 16px; border-radius:10px; cursor:pointer; background:rgba(255,255,255,0.02);
+    transition: transform 140ms, box-shadow 140ms;
+    border:1px solid rgba(255,255,255,0.02); font-weight:700;
+  }
+  .ver-btn:hover{ transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.45); }
+  .ver-btn.selected{ outline: 2px solid rgba(255,255,255,0.04); box-shadow: 0 14px 40px rgba(0,0,0,0.5); }
+
+  /* client */
   .client-screen { display:flex; flex-direction:column; gap:14px; align-items:center; justify-content:center; }
   .client-screen .desc { color:var(--muted); font-size:13px; text-align:center; }
 
   /* settings */
-  .settings-grid{ display:flex; gap:18px; align-items:center; }
+  .settings-grid{ display:flex; gap:12px; align-items:center; margin-top:12px; }
   .theme-pill{ padding:8px 12px; border-radius:8px; cursor:pointer; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--muted); font-weight:700; }
   .theme-pill.active{ background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); color:white; }
 
@@ -158,45 +167,32 @@
   .tiny { font-size:12px; color:var(--muted) }
   .muted { color:var(--muted) }
 
-  /* responsive */
+  /* hover glow for logo */
+  .logo:hover{ transform:scale(1.02); transition:transform 180ms; box-shadow:0 16px 40px rgba(0,0,0,0.5); }
+
   @media (max-width:1000px){
     .shell{ flex-direction:column; height:auto; width:94vw; }
     .sidebar{ width:100%; display:flex; flex-direction:row; gap:10px; padding:12px; overflow:auto; }
     .main{ padding:18px }
     .card{ width:100% }
+    .home-center{ flex-direction:column; align-items:stretch; }
   }
 </style>
 </head>
 <body>
   <div class="shell" role="application" aria-label="Avatar Launcher">
-    <!-- Sidebar -->
     <aside class="sidebar" aria-hidden="false">
       <div class="brand">
-        <div class="logo" id="logoSvg" title="Avatar logo">
-          <!-- SVG Avatar A + element icons -->
+        <div class="logo" id="logoSvg" title="Avatar logo" aria-hidden="true">
+          <!-- Simple stylized A + element dots -->
           <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
-                <stop offset="0" stop-color="#ffd27a"/>
-                <stop offset="1" stop-color="#ff6a00"/>
-              </linearGradient>
-              <linearGradient id="g2" x1="0" x2="1">
-                <stop offset="0" stop-color="#6ad0ff"/>
-                <stop offset="1" stop-color="#1670d2"/>
-              </linearGradient>
-            </defs>
-            <!-- outer ring -->
-            <circle cx="32" cy="32" r="30" fill="url(#g1)"/>
-            <!-- A letter -->
-            <g transform="translate(0,0)">
-              <path d="M20 44 L24 28 L32 28 L36 44 L28 44 L26 38 L22 38 Z" fill="#0b1220"/>
-              <path d="M24 26 L32 26 L28 16 Z" fill="#0b1220"/>
-            </g>
-            <!-- four small element dots -->
-            <circle cx="8" cy="8" r="4" fill="#ff7b2e" />
-            <circle cx="56" cy="8" r="4" fill="#6ad0ff" />
-            <circle cx="8" cy="56" r="4" fill="#b0e85b" />
-            <circle cx="56" cy="56" r="4" fill="#f0f0f0" />
+            <circle cx="32" cy="32" r="30" fill="white" opacity="0.06"/>
+            <path d="M18 46 L26 22 L32 22 L40 46 L34 46 L32 38 L28 38 L26 46 Z" fill="white" opacity="0.95"/>
+            <path d="M24 22 L32 22 L28 14 Z" fill="white" opacity="0.95"/>
+            <circle cx="10" cy="10" r="3.5" fill="#ff7b2e"/>
+            <circle cx="54" cy="10" r="3.5" fill="#6ad0ff"/>
+            <circle cx="10" cy="54" r="3.5" fill="#b8e86a"/>
+            <circle cx="54" cy="54" r="3.5" fill="#ffffff"/>
           </svg>
         </div>
         <div>
@@ -205,56 +201,71 @@
         </div>
       </div>
 
-      <!-- navigation -->
       <nav class="side-nav" role="navigation" aria-label="Main navigation">
-        <div class="nav-btn active" data-tab="launcher" id="btn-launcher">
-          <div class="nav-icon" aria-hidden="true">🏠</div>
+        <div class="nav-btn active" data-tab="launcher" id="btn-launcher" tabindex="0">
+          <div class="nav-icon">🏠</div>
           <div class="nav-label"><span class="main">Launcher</span><span class="sub muted">Home</span></div>
         </div>
 
-        <div class="nav-btn" data-tab="client" id="btn-client">
-          <div class="nav-icon" aria-hidden="true">▶️</div>
+        <div class="nav-btn" data-tab="client" id="btn-client" tabindex="0">
+          <div class="nav-icon">▶️</div>
           <div class="nav-label"><span class="main">Client</span><span class="sub muted">Play Astra</span></div>
         </div>
 
-        <div class="nav-btn" data-tab="mods" id="btn-mods">
-          <div class="nav-icon" aria-hidden="true">🧩</div>
-          <div class="nav-label"><span class="main">Mods</span><span class="sub muted">Open Eaglerrinth</span></div>
+        <div class="nav-btn" data-tab="mods" id="btn-mods" tabindex="0">
+          <div class="nav-icon">🧩</div>
+          <div class="nav-label"><span class="main">Mods</span><span class="sub muted">Eaglerrinth</span></div>
         </div>
 
-        <div class="nav-btn" data-tab="settings" id="btn-settings">
-          <div class="nav-icon" aria-hidden="true">⚙️</div>
+        <div class="nav-btn" data-tab="settings" id="btn-settings" tabindex="0">
+          <div class="nav-icon">⚙️</div>
           <div class="nav-label"><span class="main">Settings</span><span class="sub muted">Theme</span></div>
         </div>
 
-        <div class="nav-btn" data-tab="discord" id="btn-discord">
-          <div class="nav-icon" aria-hidden="true">💬</div>
+        <div class="nav-btn" data-tab="discord" id="btn-discord" tabindex="0">
+          <div class="nav-icon">💬</div>
           <div class="nav-label"><span class="main">Discord</span><span class="sub muted">Community</span></div>
         </div>
       </nav>
 
       <div class="spacer"></div>
-
       <div class="credits">Made by Avatar</div>
     </aside>
 
-    <!-- Main content -->
     <main class="main" role="main">
-      <!-- CENTERED content holder -->
       <div class="content">
-        <!-- LAUNCHER (home) -->
+        <!-- LAUNCHER HOME -->
         <section class="card" id="panel-launcher" role="region" aria-label="Launcher home">
           <div class="home-center">
             <div class="home-info">
               <h1>Welcome to Avatar Launcher</h1>
-              <p>Elemental, modern launcher inspired by Lunar. Use the sidebar to open the Client, Mods, Settings or join our Discord.</p>
+              <p>Elemental, modern launcher inspired by Lunar. Click Launch to pick a version — then press Launch again to open the client.</p>
             </div>
 
             <div class="play-card">
-              <div style="font-weight:700; margin-bottom:10px;">Ready to play</div>
-              <div class="tiny muted" style="margin-bottom:14px;">Click "Client" in the sidebar and then press Play to open the web client.</div>
-              <button class="play-btn" id="homePlay">Open Client</button>
+              <div style="font-weight:700; margin-bottom:10px;">Launch</div>
+              <div class="tiny muted" style="margin-bottom:14px;">Press Launch to choose a client version.</div>
+              <button class="play-btn" id="launcherLaunch">Launch</button>
             </div>
+          </div>
+        </section>
+
+        <!-- VERSIONS panel (appears when clicking Launch from launcher) -->
+        <section class="card" id="panel-versions" role="region" aria-label="Versions" style="display:none">
+          <div style="font-weight:800;font-size:20px">Select a Version</div>
+          <div class="tiny muted" style="margin-top:6px">Pick a version then press Launch below to open the web client.</div>
+
+          <div class="versions-grid" id="versionsGrid" style="margin-top:16px">
+            <div class="ver-btn" data-url="https://eaglercraft.dev/clients/1.8/index.html">1.8.8 <span class="tiny muted">Open 1.8 client</span></div>
+            <div class="ver-btn" data-url="https://eaglercraft.dev/clients/1.12/index.html">1.12 <span class="tiny muted">Open 1.12 client</span></div>
+            <div class="ver-btn" data-url="https://eaglercraft.dev/clients/1.5/index.html">1.5 <span class="tiny muted">Open 1.5 client</span></div>
+            <div class="ver-btn" data-url="https://eaglercraft.dev/clients/1.6.4/index.html">1.6.4 <span class="tiny muted">Open 1.6.4 client</span></div>
+            <div class="ver-btn" data-url="https://eaglercraft.dev/clients/Beta%201.3/index.html">Beta 1.3 <span class="tiny muted">Open Beta 1.3 client</span></div>
+          </div>
+
+          <div style="margin-top:18px; display:flex; gap:12px; align-items:center;">
+            <button class="play-btn" id="versionsLaunch">Launch Selected Version</button>
+            <div id="versionError" class="tiny" style="color:#ff8b8b; display:none;">Select a version first.</div>
           </div>
         </section>
 
@@ -275,12 +286,12 @@
           <div style="height:12px"></div>
           <div class="settings-grid">
             <button class="theme-pill" data-theme="normal">Normal</button>
-            <button class="theme-pill" data-theme="blue">Blue (Water)</button>
-            <button class="theme-pill" data-theme="red">Red (Fire)</button>
-            <button class="theme-pill" data-theme="green">Green (Earth)</button>
+            <button class="theme-pill" data-theme="blue">Blue</button>
+            <button class="theme-pill" data-theme="red">Red</button>
+            <button class="theme-pill" data-theme="green">Green</button>
+            <button class="theme-pill" data-theme="white">White (Air)</button>
           </div>
-
-          <div style="margin-top:18px" class="tiny muted">Theme will update the accent colors across the launcher.</div>
+          <div style="margin-top:14px" class="tiny muted">Theme updates the entire background and accent colors.</div>
         </section>
 
         <!-- DISCORD panel -->
@@ -295,139 +306,200 @@
   </div>
 
 <script>
-/* Avatar Launcher — JS behavior */
+/* --------------------------
+   Avatar Launcher - behavior
+   -------------------------- */
 
-/* Config */
+/* URLs & config */
 const ASTRA_URL = 'https://astraclientorg.github.io/play/js/18/';
 const MODS_REDIRECT = 'https://eaglerrinth.github.io/';
 const DISCORD_INVITE = 'https://discord.gg/ehjVwh4Zpf';
 
-/* Panels map */
+/* Elements */
+const navButtons = document.querySelectorAll('.nav-btn');
 const panels = {
   launcher: document.getElementById('panel-launcher'),
+  versions: document.getElementById('panel-versions'),
   client: document.getElementById('panel-client'),
   settings: document.getElementById('panel-settings'),
   discord: document.getElementById('panel-discord'),
 };
+const launcherLaunchBtn = document.getElementById('launcherLaunch');
+const versionsGrid = document.getElementById('versionsGrid');
+const versionsLaunchBtn = document.getElementById('versionsLaunch');
+const versionError = document.getElementById('versionError');
+let selectedVersionBtn = null;
 
-/* Nav buttons */
-const navButtons = document.querySelectorAll('.nav-btn');
-
-/* Activate a tab: set active class and show its panel.
-   Special case: mods -> immediate redirect. */
-function activateTab(name){
-  navButtons.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-  // if mods -> redirect immediately
-  if(name === 'mods'){
-    window.open(MODS_REDIRECT, '_blank');
-    return;
-  }
-  // show corresponding panel, hide others
-  Object.keys(panels).forEach(k => {
-    if(panels[k]) panels[k].style.display = (k === name) ? 'block' : 'none';
-  });
+/* sound feedback via WebAudio (subtle click) */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playClick(){
+  try{
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.value = 880;
+    g.gain.value = 0.0001;
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(0.03, now + 0.007);
+    o.start(now);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+    o.stop(now + 0.16);
+  }catch(e){ /* ignore on browsers where autoplay is blocked */ }
 }
 
-/* Wire up sidebar clicks */
-navButtons.forEach(b => {
-  b.addEventListener('click', (ev)=>{
-    const t = b.dataset.tab;
-    activateTab(t);
-    // smooth focus/animation hint
-    b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 240, easing: 'cubic-bezier(.2,.9,.3,1)'});
-  });
+/* Tab activation (sidebar). Mods auto-redirect */
+function activateTab(name){
+  navButtons.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  // hide all panels except chosen; special-case: mods (redirect)
+  if(name === 'mods'){
+    window.open(MODS_REDIRECT, '_blank');
+    playClick();
+    return;
+  }
+  Object.values(panels).forEach(p => { if(p) p.style.display = 'none'; });
+  if(panels[name]) panels[name].style.display = 'block';
+  playClick();
+}
+/* wire up nav */
+navButtons.forEach(btn=>{
+  btn.addEventListener('click', ()=> activateTab(btn.dataset.tab));
+  btn.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }});
 });
 
-/* Default active */
+/* default */
 activateTab('launcher');
 
-/* Home "Open Client" button (same as going to client then play) */
-document.getElementById('homePlay').addEventListener('click', ()=>{
-  activateTab('client');
-  // small delay then focus play
-  setTimeout(()=>document.getElementById('clientPlay').focus(), 200);
+/* launcher Launch -> show Versions panel */
+launcherLaunchBtn.addEventListener('click', ()=>{
+  activateTab(''); // remove active highlight
+  // show versions panel (which is not a sidebar tab)
+  Object.values(panels).forEach(p => { if(p) p.style.display = 'none'; });
+  panels.versions.style.display = 'block';
+  playClick();
 });
 
-/* Client Play button opens Astra */
+/* Choose version logic */
+versionsGrid.addEventListener('click', (e)=>{
+  let el = e.target;
+  // walk up to .ver-btn
+  while(el && !el.classList.contains('ver-btn')) el = el.parentElement;
+  if(!el) return;
+  // toggle selection
+  if(selectedVersionBtn) selectedVersionBtn.classList.remove('selected');
+  selectedVersionBtn = el;
+  el.classList.add('selected');
+  versionError.style.display = 'none';
+  playClick();
+});
+
+/* Launch selected version */
+versionsLaunchBtn.addEventListener('click', ()=>{
+  if(!selectedVersionBtn){
+    versionError.style.display = 'block';
+    return;
+  }
+  const url = selectedVersionBtn.dataset.url;
+  if(url) window.open(url, '_blank');
+  playClick();
+});
+
+/* Client play */
 document.getElementById('clientPlay').addEventListener('click', ()=>{
   window.open(ASTRA_URL, '_blank');
+  playClick();
 });
 
 /* Discord open */
 document.getElementById('discordOpen').addEventListener('click', ()=>{
   window.open(DISCORD_INVITE, '_blank');
+  playClick();
 });
 
-/* Mods nav - already handled via activateTab (it opens a tab) */
-
-/* Theme handling */
+/* Theme handling (changes entire background + accents) */
 const themeButtons = document.querySelectorAll('.theme-pill');
 const subText = document.getElementById('subText');
 const logoEl = document.querySelector('.logo');
+const mainEl = document.querySelector('.main');
 
-function applyTheme(theme){
-  // default normal: subtle bluish
+function setTheme(theme){
+  // smooth background transitions
   if(theme === 'blue'){
-    document.documentElement.style.setProperty('--accent-1', '#6ad0ff');
-    document.documentElement.style.setProperty('--accent-2', '#1670d2');
+    document.body.style.background = 'linear-gradient(180deg,#05243a,#023a62 60%, #a6e8ff 100%)';
+    document.documentElement.style.setProperty('--accent-1','#6ad0ff');
+    document.documentElement.style.setProperty('--accent-2','#1670d2');
     subText.textContent = 'Water • Calm • Flow';
     logoEl.style.background = 'linear-gradient(135deg,#6ad0ff,#1670d2)';
   } else if(theme === 'red'){
-    document.documentElement.style.setProperty('--accent-1', '#ff7b2e');
-    document.documentElement.style.setProperty('--accent-2', '#ff3a1a');
+    document.body.style.background = 'linear-gradient(180deg,#3b0f00,#9b2b00 50%, #ff9b1f 100%)';
+    document.documentElement.style.setProperty('--accent-1','#ff7b2e');
+    document.documentElement.style.setProperty('--accent-2','#ff3a1a');
     subText.textContent = 'Fire • Bold • Flame';
     logoEl.style.background = 'linear-gradient(135deg,#ff7b2e,#ff3a1a)';
   } else if(theme === 'green'){
-    document.documentElement.style.setProperty('--accent-1', '#b8e86a');
-    document.documentElement.style.setProperty('--accent-2', '#58b847');
+    document.body.style.background = 'linear-gradient(180deg,#083a08,#2d7a1a 50%, #b8e86a 100%)';
+    document.documentElement.style.setProperty('--accent-1','#b8e86a');
+    document.documentElement.style.setProperty('--accent-2','#58b847');
     subText.textContent = 'Earth • Strong • Root';
     logoEl.style.background = 'linear-gradient(135deg,#b8e86a,#58b847)';
+  } else if(theme === 'white'){
+    document.body.style.background = 'linear-gradient(180deg,#f8fbff,#e9f2ff 60%, #ffffff 100%)';
+    document.documentElement.style.setProperty('--accent-1','#ffffff');
+    document.documentElement.style.setProperty('--accent-2','#dfefff');
+    subText.textContent = 'Air • Light • Open';
+    logoEl.style.background = 'linear-gradient(135deg,#ffffff,#dfefff)';
   } else {
     // normal
-    document.documentElement.style.setProperty('--accent-1', '#2b9eff');
-    document.documentElement.style.setProperty('--accent-2', '#1670d2');
+    document.body.style.background = 'linear-gradient(180deg,#1b1720,#0c0b0d)';
+    document.documentElement.style.setProperty('--accent-1','#2b9eff');
+    document.documentElement.style.setProperty('--accent-2','#1670d2');
     subText.textContent = 'Elemental • Modern • Sleek';
     logoEl.style.background = 'linear-gradient(135deg,var(--accent-1),var(--accent-2))';
   }
 
-  // Update play buttons color (live)
+  // update play buttons to use accent colors
   document.querySelectorAll('.play-btn').forEach(b=>{
     b.style.background = `linear-gradient(90deg,var(--accent-1),var(--accent-2))`;
   });
 
-  // persist
+  themeButtons.forEach(tb => tb.classList.toggle('active', tb.dataset.theme === theme));
   localStorage.setItem('avatar_theme', theme);
-  // mark active pill
-  themeButtons.forEach(p=>p.classList.toggle('active', p.dataset.theme === theme));
+  playClick();
 }
 
-/* Wire theme buttons */
+/* wire theme buttons */
 themeButtons.forEach(btn => {
-  btn.addEventListener('click', ()=> applyTheme(btn.dataset.theme));
+  btn.addEventListener('click', ()=> setTheme(btn.dataset.theme));
 });
 
-/* Load saved theme */
-const saved = localStorage.getItem('avatar_theme') || 'normal';
-applyTheme(saved);
+/* load saved theme */
+const savedTheme = localStorage.getItem('avatar_theme') || 'normal';
+setTheme(savedTheme);
 
-/* Small UX: keyboard accessible nav (arrow up/down) */
+/* accessibility: arrow nav through nav buttons */
 document.addEventListener('keydown', (e)=>{
   const activeIndex = Array.from(navButtons).findIndex(b=>b.classList.contains('active'));
   if(e.key === 'ArrowDown'){ const next = (activeIndex+1) % navButtons.length; navButtons[next].click(); }
   if(e.key === 'ArrowUp'){ const prev = (activeIndex-1 + navButtons.length) % navButtons.length; navButtons[prev].click(); }
 });
 
-/* Nice micro animations for panels */
-Object.values(panels).forEach(p=>{
-  if(!p) return;
-  p.animate([{opacity:0, transform:'translateY(8px)'},{opacity:1, transform:'translateY(0)'}], {duration:420, easing:'cubic-bezier(.2,.9,.3,1)', fill:'both'});
+/* small entry animations */
+document.querySelectorAll('.card').forEach((c,i)=>{
+  c.style.opacity = 0;
+  c.style.transform = 'translateY(8px)';
+  setTimeout(()=>{ c.style.transition = 'opacity 420ms ease, transform 420ms ease'; c.style.opacity = ''; c.style.transform = ''; }, 60 + i*60);
 });
 
-/* Accessibility focus states */
-document.querySelectorAll('.nav-btn, .play-btn, .theme-pill').forEach(el=>{
+/* keyboard activation for version buttons and nav */
+document.addEventListener('click', (e) => {
+  if(e.target.classList.contains('ver-btn')) return;
+});
+document.querySelectorAll('.ver-btn, .nav-btn, .play-btn, .theme-pill').forEach(el=>{
   el.tabIndex = 0;
   el.addEventListener('keydown', (ev)=>{
-    if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); el.click(); }
+    if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); el.click(); }
   });
 });
 </script>
